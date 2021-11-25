@@ -21,7 +21,7 @@
 
 
 if [[ "$(uname -s)" = "Darwin" ]]; then
-  # Add our plugin's bin diretory to user's path
+  # Add our plugin's bin directory to user's path
   PLUGIN_BIN="$(dirname $0)/bin"
   export PATH=${PATH}:${PLUGIN_BIN}
 
@@ -47,7 +47,7 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
   alias gpaste="pbpaste | perl -pe 's/\r\n|\r/\n/g'"
 
   # Add DS_Store to files ignored during completion
-  fignore=(DS_Store $fignore)
+  fignore=(DS_Store "${fignore}")
 
   # Aliases for things renamed as they were extracted into scripts
   alias cleanxmlclip='clean-xml-clip'
@@ -80,13 +80,13 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
   # been installed with brew/macports/fink
   command -v md5sum > /dev/null || \
     command -v md5 > /dev/null && \
-    alias md5sum=$(which md5)
+    alias md5sum="$(which md5)"
 
   # macOS has no `sha1sum`, so use `shasum` as a fallback if it hasn't been
   # been installed with brew/macports/fink
   command -v sha1sum > /dev/null || \
     command -v shasum > /dev/null && \
-    alias sha1sum=$(which shasum)
+    alias sha1sum="$(which shasum)"
 
   # Sue me, I like vim. Got tired of different *nix stuffing it in different
   # places, so go through the usual suspects and create an alias when we find
@@ -145,41 +145,37 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
   fi
 
   if has brew; then
-    # homebrew alias setup
-    BREW_PREFIX=$(brew --prefix)
 
     # We prefer to use the brew installed versions of things when
     # they're present
-    if [[ -x "$BREW_PREFIX/bin/memached" ]]; then
-      alias memcached="${BREW_PREFIX}/bin/memcached"
+    if [[ -x "/usr/local/bin/memached" ]]; then
+      alias memcached="/usr/local/bin/memcached"
       alias memcached-load="brew services start memcached"
       alias memcached-unload="brew services stop memcached"
     fi
 
-    if [[ -x "$BREW_PREFIX/bin/mysqladmin" ]]; then
-      alias mysqladmin="${BREW_PREFIX}/bin/mysqladmin"
+    if [[ -x "/usr/local/bin/mysqladmin" ]]; then
+      alias mysqladmin="/usr/local/bin/mysqladmin"
     fi
 
-    if [[ -x "$BREW_PREFIX/bin/mysql" ]]; then
-      alias mysql="${BREW_PREFIX}/bin/mysql"
+    if [[ -x "/usr/local/bin/mysql" ]]; then
+      alias mysql="/usr/local/bin/mysql"
       alias mysql-load="brew services start mysql"
       alias mysql-unload="brew services stop mysql"
     fi
 
-    if [[ -x "$BREW_PREFIX/bin/pg_ctl" ]]; then
-      alias pg_ctl="${BREW_PREFIX}/bin/pg_ctl"
+    if [[ -x "/usr/local/bin/pg_ctl" ]]; then
+      alias pg_ctl="/usr/local/bin/pg_ctl"
       alias postgres-load="brew services start postgresql"
       alias postgres-unload="brew services stop postgresql"
     fi
 
     # Use brew vim when present
-    if [[ -x "${BREW_PREFIX}/bin/vim" ]]; then
-      alias vim='${BREW_PREFIX}/bin/vim'
-      alias vi="${BREW_PREFIX}/bin/vim"
-      export EDITOR="${BREW_PREFIX}/bin/vim"
+    if [[ -x "/usr/local/bin/vim" ]]; then
+      alias vim='/usr/local/bin/vim'
+      alias vi="/usr/local/bin/vim"
+      export EDITOR="/usr/local/bin/vim"
       export VISUAL="${EDITOR}"
     fi
-
-    unset BREW_PREFIX
   fi
 fi
